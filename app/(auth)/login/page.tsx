@@ -32,7 +32,7 @@ export default function LoginPage() {
     })
 
     if (r.ok) {
-      router.replace('/stm-admin')
+      router.replace('/admindashboard')
       return
     }
 
