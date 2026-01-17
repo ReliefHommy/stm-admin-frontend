@@ -51,8 +51,13 @@ export async function POST(req: Request) {
 }
 
 export async function GET() {
-  const token = cookies().get('access_token')?.value
-  if (!token) return NextResponse.json({ authenticated: false }, { status: 401 })
+  const cookieStore = cookies()
+  const token = (await cookieStore).get('access_token')
+
+  if (!token) {
+    return NextResponse.json({ authenticated: false }, { status: 401 })
+  }
+
   return NextResponse.json({ authenticated: true })
 }
 
