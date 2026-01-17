@@ -27,7 +27,7 @@ export default function LoginPage() {
     })
 
     if (r.ok) {
-      router.replace('/stm-admin/AdminDashboard')
+      router.replace('/stm-admin')
       return
     }
 
@@ -85,7 +85,7 @@ export default function LoginPage() {
               <div className="lg:flex lg:justify-end">
                 <div className="w-full max-w-md rounded-2xl bg-black/30 p-6 backdrop-blur-md ring-1 ring-white/15">
                   <h2 className="text-xl font-semibold">Sign in</h2>
-                  <p className="mt-1 text-sm text-grey/75">
+                  <p className="mt-1 text-sm text-white/75">
                     Use your superuser email and password.
                   </p>
 
