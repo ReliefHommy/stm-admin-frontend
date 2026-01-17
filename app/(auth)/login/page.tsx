@@ -19,7 +19,7 @@ export default function LoginForm() {
     })
 
     if (res.ok) {
-    router.push('/userprofiles') 
+    router.push('/stm-admin') 
       //router.push('/vendor') 
     } else {
       const data = await res.json()
