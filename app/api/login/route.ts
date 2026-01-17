@@ -5,7 +5,6 @@ import { NextResponse } from 'next/server'
 export async function POST(req: Request) {
   const { email, password } = await req.json()
 
-  
   const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL || process.env.NEXT_PUBLIC_API_BASE
   if (!apiBase) {
     return NextResponse.json({ error: 'Missing API base URL' }, { status: 500 })
@@ -14,8 +13,6 @@ export async function POST(req: Request) {
   const response = await fetch(`${apiBase}/api/token/`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-
-    // IMPORTANT: SimpleJWT expects "username" key by default
     body: JSON.stringify({
       username: email,
       password,
@@ -26,13 +23,12 @@ export async function POST(req: Request) {
   let data: any = {}
   try {
     data = text ? JSON.parse(text) : {}
-  } catch {
-    // keep data as {}
-  }
+  } catch {}
 
   if (!response.ok) {
+    // helpful for debugging: pass through detail
     return NextResponse.json(
-      { error: data?.detail || 'Invalid credentials' },
+      { error: data?.detail || data || 'Invalid credentials' },
       { status: response.status || 401 }
     )
   }
@@ -43,8 +39,6 @@ export async function POST(req: Request) {
 
   const res = NextResponse.json({ success: true })
 
-  // Cookie settings for admin.somtammarket.com -> api.somtammarket.com usage:
-  // If you later need cross-subdomain requests, change sameSite to "none"
   res.cookies.set('access_token', data.access, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
@@ -57,7 +51,8 @@ export async function POST(req: Request) {
 }
 
 export async function GET() {
-  const token = (await cookies()).get('access_token')?.value
+  const token = cookies().get('access_token')?.value
   if (!token) return NextResponse.json({ authenticated: false }, { status: 401 })
   return NextResponse.json({ authenticated: true })
 }
+
