@@ -1,14 +1,30 @@
+// app/admindashboard/page.tsx
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
-import { TrendingUp, TrendingDown } from 'lucide-react'
+import {
+  TrendingUp,
+  TrendingDown,
+  Store,
+  Package,
+  ShoppingCart,
+  FileText,
+  ArrowUpRight,
+} from 'lucide-react'
 
 // Mock data
 const stats = [
-  { title: 'Stores', value: 24, change: 12, changeType: 'increase' },
-  { title: 'Products', value: 156, change: -3, changeType: 'decrease' },
-  { title: 'Orders', value: 89, change: 8, changeType: 'increase' },
-  { title: 'Posts', value: 42, change: 15, changeType: 'increase' },
+  { title: 'Stores', value: 24, change: 12, changeType: 'increase' as const, icon: Store },
+  { title: 'Products', value: 156, change: -3, changeType: 'decrease' as const, icon: Package },
+  { title: 'Orders', value: 89, change: 8, changeType: 'increase' as const, icon: ShoppingCart },
+  { title: 'Posts', value: 42, change: 15, changeType: 'increase' as const, icon: FileText },
 ]
 
 const recentOrders = [
@@ -25,100 +41,241 @@ const recentItems = [
   { id: '4', title: 'New Collection', type: 'Post', image: '/placeholder.jpg' },
 ]
 
+function statusBadgeClass(status: string) {
+  // Warm orange theme + calm neutrals (like modern admin templates)
+  switch (status) {
+    case 'Completed':
+      return 'bg-emerald-50 text-emerald-700 border-emerald-200'
+    case 'Pending':
+      return 'bg-amber-50 text-amber-800 border-amber-200'
+    case 'Shipped':
+      return 'bg-sky-50 text-sky-700 border-sky-200'
+    case 'Processing':
+      return 'bg-orange-50 text-orange-800 border-orange-200'
+    default:
+      return 'bg-slate-50 text-slate-700 border-slate-200'
+  }
+}
+
 export default function AdminDashboard() {
   return (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold">Dashboard</h1>
-
-      {/* Quick Stat Tiles */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat) => (
-          <Card key={stat.title}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
-              {stat.changeType === 'increase' ? (
-                <TrendingUp className="h-4 w-4 text-green-600" />
-              ) : (
-                <TrendingDown className="h-4 w-4 text-red-600" />
-              )}
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
-              <p className="text-xs text-muted-foreground">
-                <span className={stat.changeType === 'increase' ? 'text-green-600' : 'text-red-600'}>
-                  {stat.change > 0 ? '+' : ''}{stat.change}%
-                </span>{' '}
-                from last month
-              </p>
-            </CardContent>
-          </Card>
-        ))}
+    <div className="relative">
+      {/* Soft warm background like your STM orange vibe */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-orange-200/40 blur-3xl" />
+        <div className="absolute top-40 -left-24 h-72 w-72 rounded-full bg-amber-200/30 blur-3xl" />
+        <div className="absolute bottom-0 right-10 h-80 w-80 rounded-full bg-orange-100/40 blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-b from-orange-50/70 via-white to-white" />
       </div>
 
-      {/* Recent Activity Feed */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Latest Orders */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Latest Orders</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Order ID</TableHead>
-                  <TableHead>Customer</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Amount</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {recentOrders.map((order) => (
-                  <TableRow key={order.id}>
-                    <TableCell className="font-medium">{order.id}</TableCell>
-                    <TableCell>{order.customer}</TableCell>
-                    <TableCell>
-                      <Badge
-                        variant={
-                          order.status === 'Completed' ? 'default' :
-                          order.status === 'Pending' ? 'secondary' :
-                          order.status === 'Shipped' ? 'outline' : 'destructive'
-                        }
-                      >
-                        {order.status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>{order.amount}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-sm text-slate-500">Admin • Overview</p>
+            <h1 className="text-3xl font-bold tracking-tight text-slate-900">
+              Dashboard
+              <span className="ml-2 align-middle text-sm font-semibold text-orange-700/90">
+                (Groceries)
+              </span>
+            </h1>
+            <p className="mt-1 text-sm text-slate-600">
+              A quick look at stores, products, orders, and content performance.
+            </p>
+          </div>
 
-        {/* Latest Products/Posts */}
-        <Card>
-          <CardHeader>
-            <CardTitle>Latest Products & Posts</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {recentItems.map((item) => (
-                <div key={item.id} className="flex items-center space-x-4">
-                  <img
-                    src={item.image}
-                    alt={item.title}
-                    className="w-12 h-12 rounded object-cover"
-                  />
-                  <div className="flex-1">
-                    <p className="font-medium">{item.title}</p>
-                    <Badge variant="outline">{item.type}</Badge>
+          {/* Simple “filter pills” (no extra component needed) */}
+          <div className="flex flex-wrap items-center gap-2">
+            <button className="rounded-full border border-orange-200 bg-white/70 px-3 py-1.5 text-sm font-medium text-slate-700 shadow-sm backdrop-blur hover:bg-white">
+              Today
+            </button>
+            <button className="rounded-full border border-orange-200 bg-white/70 px-3 py-1.5 text-sm font-medium text-slate-700 shadow-sm backdrop-blur hover:bg-white">
+              This week
+            </button>
+            <button className="rounded-full border border-orange-200 bg-orange-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-700">
+              This month
+            </button>
+          </div>
+        </div>
+
+        {/* Quick Stat Tiles */}
+        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+          {stats.map((stat) => {
+            const Icon = stat.icon
+            const isUp = stat.changeType === 'increase'
+            return (
+              <Card
+                key={stat.title}
+                className="group relative overflow-hidden border-orange-100/70 bg-white/70 shadow-sm backdrop-blur transition hover:shadow-md"
+              >
+                {/* subtle top accent */}
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-orange-500 via-amber-400 to-orange-200 opacity-70" />
+
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
+                  <CardTitle className="text-sm font-semibold text-slate-700">
+                    {stat.title}
+                  </CardTitle>
+
+                  <div className="flex items-center gap-2">
+                    <div className="grid h-9 w-9 place-items-center rounded-xl border border-orange-100 bg-orange-50 text-orange-700">
+                      <Icon className="h-4 w-4" />
+                    </div>
+                    {isUp ? (
+                      <TrendingUp className="h-4 w-4 text-emerald-600" />
+                    ) : (
+                      <TrendingDown className="h-4 w-4 text-rose-600" />
+                    )}
                   </div>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+                </CardHeader>
+
+                <CardContent className="space-y-2">
+                  <div className="flex items-end justify-between">
+                    <div className="text-3xl font-bold text-slate-900">{stat.value}</div>
+
+                    <div
+                      className={[
+                        'inline-flex items-center gap-1 rounded-full border px-2 py-1 text-xs font-semibold',
+                        isUp
+                          ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
+                          : 'border-rose-200 bg-rose-50 text-rose-700',
+                      ].join(' ')}
+                    >
+                      <span>{stat.change > 0 ? '+' : ''}{stat.change}%</span>
+                      <ArrowUpRight className="h-3.5 w-3.5 opacity-70" />
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-slate-500">Compared to last month</p>
+
+                  {/* mini progress bar vibe */}
+                  <div className="h-2 w-full rounded-full bg-orange-100/60">
+                    <div
+                      className="h-2 rounded-full bg-gradient-to-r from-orange-600 to-amber-400"
+                      style={{
+                        width: `${Math.min(100, Math.max(8, Math.abs(stat.change) * 6))}%`,
+                      }}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+            )
+          })}
+        </div>
+
+        {/* Recent Activity Feed */}
+        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+          {/* Latest Orders */}
+          <Card className="border-orange-100/70 bg-white/70 shadow-sm backdrop-blur">
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="text-base font-bold text-slate-900">
+                Latest Orders
+              </CardTitle>
+              <span className="text-xs font-medium text-slate-500">Updated just now</span>
+            </CardHeader>
+
+            <CardContent>
+              <div className="overflow-hidden rounded-xl border border-orange-100 bg-white">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="bg-orange-50/70 hover:bg-orange-50/70">
+                      <TableHead className="text-slate-700">Order ID</TableHead>
+                      <TableHead className="text-slate-700">Customer</TableHead>
+                      <TableHead className="text-slate-700">Status</TableHead>
+                      <TableHead className="text-right text-slate-700">Amount</TableHead>
+                    </TableRow>
+                  </TableHeader>
+
+                  <TableBody>
+                    {recentOrders.map((order) => (
+                      <TableRow key={order.id} className="hover:bg-orange-50/40">
+                        <TableCell className="font-semibold text-slate-900">
+                          {order.id}
+                        </TableCell>
+                        <TableCell className="text-slate-700">{order.customer}</TableCell>
+                        <TableCell>
+                          <Badge
+                            variant="outline"
+                            className={[
+                              'rounded-full px-2.5 py-1 text-xs font-semibold',
+                              statusBadgeClass(order.status),
+                            ].join(' ')}
+                          >
+                            {order.status}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-right font-semibold text-slate-900">
+                          {order.amount}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+
+              <div className="mt-4 text-sm text-slate-600">
+                Tip: Click an order to open details (we can wire routing next).
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Latest Products/Posts */}
+          <Card className="border-orange-100/70 bg-white/70 shadow-sm backdrop-blur">
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="text-base font-bold text-slate-900">
+                Latest Products & Posts
+              </CardTitle>
+              <span className="text-xs font-medium text-slate-500">Last 7 days</span>
+            </CardHeader>
+
+            <CardContent className="space-y-4">
+              <div className="grid gap-3">
+                {recentItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center gap-4 rounded-2xl border border-orange-100 bg-white p-3 shadow-sm transition hover:shadow-md"
+                  >
+                    {/* Image / placeholder */}
+                    <div className="relative h-12 w-12 overflow-hidden rounded-xl border border-orange-100 bg-gradient-to-br from-orange-100 to-amber-50">
+                      {/* If you want Next/Image later, we can swap this. Keeping <img> simple for now. */}
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="h-full w-full object-cover opacity-90"
+                      />
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-semibold text-slate-900">{item.title}</p>
+                      <div className="mt-1 flex items-center gap-2">
+                        <Badge
+                          variant="outline"
+                          className="rounded-full border-orange-200 bg-orange-50 text-orange-800"
+                        >
+                          {item.type}
+                        </Badge>
+                        <span className="text-xs text-slate-500">• added recently</span>
+                      </div>
+                    </div>
+
+                    <div className="text-xs font-semibold text-orange-700 hover:text-orange-800">
+                      View
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Small “callout” panel like admin templates */}
+              <div className="rounded-2xl border border-orange-200/80 bg-gradient-to-r from-orange-50 to-amber-50 p-4">
+                <p className="text-sm font-semibold text-slate-900">
+                  Next step: make this dashboard feel alive ✨
+                </p>
+                <p className="mt-1 text-sm text-slate-600">
+                  We can add: mini chart card, top sellers, map widget, and “export” actions (like your Pinterest template screenshot).
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   )

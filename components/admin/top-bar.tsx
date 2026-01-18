@@ -23,6 +23,7 @@ import {
 } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { Search, ChevronDown, User, LogOut } from 'lucide-react'
+import Link from 'next/link'
 
 export function TopBar() {
   const { currentStore, setCurrentStore, stores } = useAdmin()
@@ -115,10 +116,13 @@ export function TopBar() {
             Superuser
           </Badge>
         </div>
-        <Button variant="ghost" size="sm" onClick={handleLogout}>
-          <LogOut className="h-4 w-4 mr-2" />
-          Logout
-        </Button>
+        <Link href={'/logout'}>
+          <Button variant="ghost" size="sm" onClick={handleLogout}>
+            <LogOut className="h-4 w-4 mr-2" />
+            Logout
+          </Button>
+        </Link>
+       
       </div>
 
       {/* Global Search Dialog */}
