@@ -1,9 +1,11 @@
-// app/admindashboard/layout.tsx
-import { AdminProvider } from '@/lib/admin-context'
-import { Sidebar } from '@/components/admin/sidebar'
-import { TopBar } from '@/components/admin/top-bar'
+// app/studio-dashboard/layout.tsx
 
-export default function AdminLayout({
+import { Sidebar } from "@/components/studio/sidebar"
+import { AdminProvider } from "@/lib/studio-context "
+
+
+
+export default function StudioLayout({
   children,
 }: {
   children: React.ReactNode
@@ -13,7 +15,7 @@ export default function AdminLayout({
       <div className="flex h-screen bg-gray-50">
         <Sidebar />
         <div className="flex-1 flex flex-col">
-          <TopBar />
+         
           <main className="flex-1 overflow-auto p-6">
             {children}
           </main>

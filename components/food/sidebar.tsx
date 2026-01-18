@@ -31,16 +31,16 @@ export function Sidebar() {
 
   return (
     <div className={cn(
-      "flex flex-col bg-amber-700 text-white transition-all duration-300",
+      "flex flex-col bg-lime-600 text-white transition-all duration-300",
       collapsed ? "w-16" : "w-64"
     )}>
       <div className="flex items-center justify-between p-4 border-b border-gray-700">
-        {!collapsed && <h2 className="text-lg font-semibold">Admin</h2>}
+        {!collapsed && <h2 className="text-lg font-semibold">Foods</h2>}
         <Button
           variant="ghost"
           size="sm"
           onClick={() => setCollapsed(!collapsed)}
-          className="text-white hover:bg-amber-900"
+          className="text-white hover:bg-gray-800"
         >
           {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
         </Button>
@@ -53,9 +53,9 @@ export function Sidebar() {
               <Button
                 variant={isActive ? "secondary" : "ghost"}
                 className={cn(
-                  "w-full justify-start text-white hover:bg-amber-800",
+                  "w-full justify-start text-white hover:bg-lime-700",
                   collapsed ? "px-2" : "px-4",
-                  isActive && "bg-amber-700"
+                  isActive && "bg-gray-700"
                 )}
               >
                 <item.icon className="h-4 w-4" />

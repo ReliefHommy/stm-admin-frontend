@@ -32,7 +32,7 @@ export default function LoginPage() {
     })
 
     if (r.ok) {
-      router.replace('/admindashboard')
+      router.replace('/entry-doorway')
       return
     }
 
