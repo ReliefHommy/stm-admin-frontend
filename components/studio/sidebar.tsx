@@ -14,12 +14,13 @@ import {
   FileText,
   ChevronLeft,
   ChevronRight,
-  Home
+  Home,
+  DoorOpen
 } from 'lucide-react'
 
 const navigation = [
   { name: 'Home', href: '/entry-doorway', icon: Home },
-  { name: 'Products', href: '/stm-admin/products', icon: Package },
+  { name: 'Internal Admins', href: '/admindashboard', icon: DoorOpen },
   { name: 'Partner Stores', href: '/stm-admin/stores', icon: Store },
   { name: 'Store Locations', href: '/stm-admin/stores/locations', icon: MapPin },
   { name: 'Orders', href: '/stm-admin/orders', icon: ShoppingCart },

@@ -14,26 +14,27 @@ import {
   TrendingDown,
   Store,
   Package,
-  ShoppingCart,
-  FileText,
   ArrowUpRight,
+  UserCheck,
+  Paintbrush,
+  ShoppingCart,
 } from 'lucide-react'
 
 // Mock data
 const stats = [
-  { title: 'Stores', value: 24, change: 12, changeType: 'increase' as const, icon: Store },
-  { title: 'Products', value: 156, change: -3, changeType: 'decrease' as const, icon: Package },
-  { title: 'Orders', value: 89, change: 8, changeType: 'increase' as const, icon: ShoppingCart },
-  { title: 'Posts', value: 42, change: 15, changeType: 'increase' as const, icon: FileText },
+  { title: 'Admin User', value: 2, change: 10, changeType: 'increase' as const, icon: UserCheck },
+  { title: 'Creators', value: 1, change: -3, changeType: 'decrease' as const, icon: Paintbrush },
+  { title: 'Vendors', value: 3, change: 8, changeType: 'increase' as const, icon: Store },
+  { title: 'Partner', value: 2, change: 15, changeType: 'increase' as const, icon: Package },
+  { title: 'Customers', value: 2, change: 15, changeType: 'increase' as const, icon: ShoppingCart },
 ]
 
 const recentOrders = [
-  { id: 'ORD-001', customer: 'John Doe', status: 'Completed', amount: '$129.99' },
-  { id: 'ORD-002', customer: 'Jane Smith', status: 'Pending', amount: '$79.50' },
-  { id: 'ORD-003', customer: 'Bob Johnson', status: 'Shipped', amount: '$299.99' },
-  { id: 'ORD-004', customer: 'Alice Brown', status: 'Processing', amount: '$49.99' },
+  { id: 'ORD-001', customer: 'John Doe', email: 'John Doe@gmail.com',status: 'Completed' },
+  { id: 'ORD-002', customer: 'Jane Smith', email: 'John Doe@gmail.com',status: 'Pending' },
+  { id: 'ORD-003', customer: 'Bob Johnson', email: 'John Doe@gmail.com',status: 'Shipped' },
+  { id: 'ORD-004', customer: 'Alice Brown', email: 'John Doe@gmail.com',status: 'Processing' },
 ]
-
 const recentItems = [
   { id: '1', title: 'Wireless Headphones', type: 'Product', image: '/placeholder.jpg' },
   { id: '2', title: 'Summer Sale Post', type: 'Post', image: '/placeholder.jpg' },
@@ -76,11 +77,11 @@ export default function AdminDashboard() {
             <h1 className="text-3xl font-bold tracking-tight text-slate-900">
               Dashboard
               <span className="ml-2 align-middle text-sm font-semibold text-orange-700/90">
-                (Groceries)
+                (STM-Admin)
               </span>
             </h1>
             <p className="mt-1 text-sm text-slate-600">
-              A quick look at stores, products, orders, and content performance.
+              A quick look at Admin User, Vendors, Creators, Partner and Roles & Permissions.
             </p>
           </div>
 
@@ -168,7 +169,7 @@ export default function AdminDashboard() {
           <Card className="border-orange-100/70 bg-white/70 shadow-sm backdrop-blur">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-base font-bold text-slate-900">
-                Latest Orders
+                Recent Creators
               </CardTitle>
               <span className="text-xs font-medium text-slate-500">Updated just now</span>
             </CardHeader>
@@ -177,23 +178,33 @@ export default function AdminDashboard() {
               <div className="overflow-hidden rounded-xl border border-orange-100 bg-white">
                 <Table>
                   <TableHeader>
-                    <TableRow className="bg-orange-50/70 hover:bg-orange-50/70">
+                <TableRow className="bg-orange-50/70 hover:bg-orange-50/70">
                       <TableHead className="text-slate-700">Order ID</TableHead>
-                      <TableHead className="text-slate-700">Customer</TableHead>
+                      <TableHead className="text-slate-700">Username</TableHead>
+                      <TableHead className="text-slate-700">Email</TableHead>
                       <TableHead className="text-slate-700">Status</TableHead>
-                      <TableHead className="text-right text-slate-700">Amount</TableHead>
+                 
                     </TableRow>
                   </TableHeader>
 
                   <TableBody>
                     {recentOrders.map((order) => (
                       <TableRow key={order.id} className="hover:bg-orange-50/40">
+
                         <TableCell className="font-semibold text-slate-900">
                           {order.id}
                         </TableCell>
-                        <TableCell className="text-slate-700">{order.customer}</TableCell>
-                        <TableCell>
-                          <Badge
+
+                        <TableCell className="text-slate-700">{order.customer}
+
+                        </TableCell>
+
+                       
+                           <TableCell className="text-left font-semibold text-slate-900">
+                          {order.email}
+                        </TableCell>
+                         <TableCell>
+                             <Badge
                             variant="outline"
                             className={[
                               'rounded-full px-2.5 py-1 text-xs font-semibold',
@@ -203,9 +214,8 @@ export default function AdminDashboard() {
                             {order.status}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-right font-semibold text-slate-900">
-                          {order.amount}
-                        </TableCell>
+                       
+                       
                       </TableRow>
                     ))}
                   </TableBody>

@@ -8,21 +8,25 @@ import { Button } from '@/components/ui/button'
 import {
   Package,
   Store,
-  MapPin,
+ 
   ShoppingCart,
-  FileText,
   ChevronLeft,
   ChevronRight,
-  Home
+  Home,
+  DoorOpen,
+  Paintbrush,
+  UserCheck,
+
 } from 'lucide-react'
 
 const navigation = [
   { name: 'Home', href: '/entry-doorway', icon: Home },
-  { name: 'Products', href: '/stm-admin/products', icon: Package },
-  { name: 'Partner Stores', href: '/stm-admin/stores', icon: Store },
-  { name: 'Store Locations', href: '/stm-admin/stores/locations', icon: MapPin },
-  { name: 'Orders', href: '/stm-admin/orders', icon: ShoppingCart },
-  { name: 'Posts', href: '/stm-admin/posts', icon: FileText },
+  { name: 'Admin Users', href: '/admindashboard', icon: UserCheck },
+  { name: 'Creators', href: '/admindashboard', icon: Paintbrush },
+  { name: 'Vendors Stores', href: '/admindashboard', icon: Store },
+  { name: 'Partner', href: '/admindashboard', icon: Package},
+  { name: 'Customers', href: '/admindashboard', icon: ShoppingCart },
+  { name: 'Roles & Permissions', href: '/admindashboard', icon: DoorOpen },
 ]
 
 export function Sidebar() {
