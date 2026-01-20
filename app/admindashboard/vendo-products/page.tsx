@@ -1,32 +1,29 @@
 //app/admindashboard/vendor-products/page.tsx
 
 
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 
-
-
-
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 import {
   Table,
-  TableBody,
-  TableCell,
-  TableHead,
   TableHeader,
+  TableBody,
   TableRow,
-} from '@/components/ui/table'
+  TableHead,
+  TableCell,
+} 
+from "@/components/ui/table"
 
 
+import Link from "next/link"
+import { Button } from '@/components/ui/button'
+import { Trash2 } from "lucide-react"
+
+//import { Pencil } from "lucide-react"
 
 
-
-
-
-
-
-export default async function VendorProduct() {
-      const cookieStore = await cookies()
+export default async function VendorProducts() {
+  const cookieStore = await cookies()
   const token = cookieStore.get('access_token')
   const API_URL = process.env.API_URL || 'https://api.somtammarket.com';
 
@@ -104,84 +101,43 @@ let fetchError: string | null = null
     console.error('Error fetching user data', err)
   }
 
-
-
-
-
-
-
-
-  return (
-    <div className="relative">
-      {/* Soft warm background like your STM orange vibe */}
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-orange-200/40 blur-3xl" />
-        <div className="absolute top-40 -left-24 h-72 w-72 rounded-full bg-amber-200/30 blur-3xl" />
-        <div className="absolute bottom-0 right-10 h-80 w-80 rounded-full bg-orange-100/40 blur-3xl" />
-        <div className="absolute inset-0 bg-gradient-to-b from-orange-50/70 via-white to-white" />
+return (
+  <div className="p-6">
+    {fetchError ? (
+      <div className="mb-4 p-4 rounded bg-red-100 text-red-700">
+        {fetchError}. Please try again later.
       </div>
+    ) : null}
+    <div className="flex justify-between items-center mb-4">
+      <h1 className="text-2xl font-bold text-gray-600">
+       {user ? `${user.id}:${user.email}'s Products` : 'Products'}
+      </h1>
 
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <p className="text-sm text-slate-500">Admin • Overview</p>
-            <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-              Dashboard
-              <span className="ml-2 align-middle text-sm font-semibold text-orange-700/90">
-                (STM-Admin)
-              </span>
-            </h1>
-            <p className="mt-1 text-sm text-slate-600">
-              A quick look at Admin User, Vendors, Creators, Partner and Roles & Permissions.
-            </p>
-          </div>
+      <Link
+        href="/vendor/products/new"
+        className="rounded bg-green-600 px-4 py-2 text-white hover:bg-green-700"
+      >
+        + Add Product
+      </Link>
+    </div>
 
-          {/* Simple “filter pills” (no extra component needed) */}
-          <div className="flex flex-wrap items-center gap-2">
-            <button className="rounded-full border border-orange-200 bg-white/70 px-3 py-1.5 text-sm font-medium text-slate-700 shadow-sm backdrop-blur hover:bg-white">
-              Today
-            </button>
-            <button className="rounded-full border border-orange-200 bg-white/70 px-3 py-1.5 text-sm font-medium text-slate-700 shadow-sm backdrop-blur hover:bg-white">
-              This week
-            </button>
-            <button className="rounded-full border border-orange-200 bg-orange-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-700">
-              This month
-            </button>
-          </div>
-        </div>
-
-
-        <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-          {/* Recent Products */}
-          <Card className="border-orange-100/70 bg-white/70 shadow-sm backdrop-blur">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-base font-bold text-slate-900">
-                Recent Products
-              </CardTitle>
-              <span className="text-xs font-medium text-slate-500">Updated just now</span>
-            </CardHeader>
-
-            <CardContent>
-              <div className="overflow-hidden rounded-xl border border-orange-100 bg-white">
-                <Table>
-                  <TableHeader>
-                <TableRow className="bg-orange-50/70 hover:bg-orange-50/70">
-                      <TableHead className="text-slate-700">Product ID</TableHead>
-                      <TableHead className="text-slate-700">name</TableHead>
-                      <TableHead className="text-slate-700">Price</TableHead>
-                      <TableHead className="text-slate-700">Stocks</TableHead>
-                 
-                    </TableRow>
-                  </TableHeader>
-
+    <div className="overflow-x-auto">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Img</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Description</TableHead>
+            <TableHead className="text-right">Price</TableHead>
+          </TableRow>
+        </TableHeader>
         <TableBody>
           {products.map((product: any) => (
             <TableRow key={product.id}>
               <TableCell>
                 <img
                   src={product.image}
-                  alt={product.user_id}
+                  alt={product.title}
                   className="w-16 h-16 object-cover rounded"
                 />
               </TableCell>
@@ -196,25 +152,18 @@ let fetchError: string | null = null
                 {product.price}
               </TableCell>
               <TableCell className="text-center space-x-2">
-{product.user_email}
+                <Button variant="ghost" size="sm">Edit</Button>
+                <Button variant="ghost" size="icon">
+                  <Trash2 className="h-4 w-4" />
+                </Button>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
-                </Table>
-              </div>
-
-              <div className="mt-4 text-sm text-slate-600">
-                Tip: Click an order to open details (we can wire routing next).
-              </div>
-            </CardContent>
-          </Card>
-
-
-         
-         
-        </div>
-      </div>
+      </Table>
     </div>
-  )
+
+
+  </div>
+);
 }
