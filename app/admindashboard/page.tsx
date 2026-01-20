@@ -1,4 +1,11 @@
 // app/admindashboard/page.tsx
+
+import { cookies } from 'next/headers';
+import { redirect } from 'next/navigation';
+
+
+
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Table,
@@ -58,7 +65,26 @@ function statusBadgeClass(status: string) {
   }
 }
 
-export default function AdminDashboard() {
+export default async function AdminDashboard() {
+
+const token = (await cookies()).get('access_token');
+
+ if (!token?.value) redirect('/login');
+
+  
+  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/me/`, {
+   
+    headers: {
+      Authorization: `Bearer ${token.value}`,
+    },
+     cache: 'no-store',
+    // If you need credentials, add: credentials: 'include'
+  });
+
+  if (!res.ok) redirect('/login');
+
+  const user = await res.json();
+
   return (
     <div className="relative">
       {/* Soft warm background like your STM orange vibe */}
@@ -285,6 +311,68 @@ export default function AdminDashboard() {
               </div>
             </CardContent>
           </Card>
+          {/* Implement Database */}
+          <Card className="border-orange-100/70 bg-white/70 shadow-sm backdrop-blur">
+            <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="text-base font-bold text-slate-900">
+                Welcome Back - {user.username}
+              </CardTitle>
+              <span className="text-xs font-medium text-slate-500">Last 7 days</span>
+            </CardHeader>
+
+            <CardContent className="space-y-4">
+              <div className="grid gap-3">
+                {recentItems.map((item) => (
+                  <div
+                    key={user.id}
+                    className="flex items-center gap-4 rounded-2xl border border-orange-100 bg-white p-3 shadow-sm transition hover:shadow-md"
+                  >
+                    {/* Image / placeholder */}
+                    <div className="relative h-12 w-12 overflow-hidden rounded-xl border border-orange-100 bg-gradient-to-br from-orange-100 to-amber-50">
+                      {/* If you want Next/Image later, we can swap this. Keeping <img> simple for now. */}
+                      <img
+                        src={item.image}
+                        alt={user.username}
+                        className="h-full w-full object-cover opacity-90"
+                      />
+                    </div>
+
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-semibold text-slate-900">{user.email}</p>
+                      <div className="mt-1 flex items-center gap-2">
+                        <Badge
+                          variant="outline"
+                          className="rounded-full border-orange-200 bg-orange-50 text-orange-800"
+                        >
+                          {item.type}
+                        </Badge>
+                        <span className="text-xs text-slate-500">• added recently</span>
+                      </div>
+                    </div>
+
+                    <div className="text-xs font-semibold text-orange-700 hover:text-orange-800">
+                      View
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Small “callout” panel like admin templates */}
+              <div className="rounded-2xl border border-orange-200/80 bg-gradient-to-r from-orange-50 to-amber-50 p-4">
+                <p className="text-sm font-semibold text-slate-900">
+                  Next step: make this dashboard feel alive ✨
+                </p>
+    <p className="text-gray-600">User ID: {user.id}</p>
+     <p className="text-gray-600">Partner: {user.is_partner ? 'Yes' : 'No'}</p>
+     <p className="text-gray-600">Customer: {user.is_customer ? 'Yes' : 'No'}</p>
+                <p className="mt-1 text-sm text-slate-600">
+                  We can add: mini chart card, top sellers, map widget, and “export” actions (like your Pinterest template screenshot).
+                </p>
+              </div>
+            </CardContent>
+          </Card>
+         
+         
         </div>
       </div>
     </div>

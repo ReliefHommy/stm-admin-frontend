@@ -1,4 +1,5 @@
 // app/api/login/route.ts
+// app/api/login/route.ts
 import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
@@ -60,4 +61,5 @@ export async function GET() {
 
   return NextResponse.json({ authenticated: true })
 }
+
 
