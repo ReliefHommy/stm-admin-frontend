@@ -6,13 +6,18 @@ import { Button } from "@/components/ui/button";
 
 type UserProfile = {
   id: number;
+
+  user_id?: number | null;
+  email?: string | null;
+
+  is_vendor?: boolean;
+  is_customer?: boolean;
+
+  phone?: string | null;
   avatar?: string | null;
-  bio?: string | null;
-  user?: {
-    id: number;
-    email: string;
-  };
+  address?: string | null;
 };
+
 
 export default function UserProfilesPage() {
   const [users, setUsers] = React.useState<UserProfile[]>([]);
@@ -80,12 +85,12 @@ export default function UserProfilesPage() {
           )}
 
           {!loading && !error && users.map((p) => (
-            <TableRow key={p.id}>
+            <TableRow key={p.user_id}>
               <TableCell>
                 {p.avatar ? (
                   <img
                     src={p.avatar}
-                    alt={`profile-${p.id}`}
+                    alt={`profile-${p.user_id}`}
                     className="w-16 h-16 object-cover rounded"
                   />
                 ) : (
@@ -93,12 +98,10 @@ export default function UserProfilesPage() {
                 )}
               </TableCell>
 
-              <TableCell>{p.user?.id ?? "-"}</TableCell>
-              <TableCell>{p.user?.email ?? "-"}</TableCell>
+             <TableCell>{p.user_id ?? "-"}</TableCell>
+              <TableCell>{p.email ?? "-"}</TableCell>
 
-              <TableCell>
-                {p.bio ? (p.bio.slice(0, 40) + (p.bio.length > 40 ? "..." : "")) : "-"}
-              </TableCell>
+              <TableCell>{ p.user_id} </TableCell>
 
               <TableCell className="text-right">{p.id}</TableCell>
 
