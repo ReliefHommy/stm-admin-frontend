@@ -1,9 +1,8 @@
-// app/food-dashboard/page.tsx
-
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
-
-
+//app/foo-d-dashboard/products/page.tsx
+import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
+import { Button } from '@/components/ui/button'
+import { Trash2 } from "lucide-react"
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -63,24 +62,92 @@ function statusBadgeClass(status: string) {
   }
 }
 
-export default async function PartnerStoreDashboard() {
-  const token = (await cookies()).get('access_token');
+export default async function FoodVendorDashboard() {
+      const cookieStore = await cookies()
+  const token = cookieStore.get('access_token')
+  const API_URL = process.env.API_URL || 'https://api.somtammarket.com';
 
- if (!token?.value) redirect('/login');
 
-  
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/api/me/`, {
-   
-    headers: {
-      Authorization: `Bearer ${token.value}`,
-    },
-     cache: 'no-store',
-    // If you need credentials, add: credentials: 'include'
-  });
+  if (!token?.value) {
+    redirect('/login')
+  }
 
-  if (!res.ok) redirect('/login');
+  type Product = {
+    id: string | number
+    title?: string
+    description?: string
+    price?: number
+    image?: string
+  }
 
-  const user = await res.json();
+  type User = {
+    id: string | number
+    email: string
+  }
+
+let products: Product[] = []
+let user: User | null = null
+let fetchError: string | null = null
+
+
+  try {
+    const res = await fetch(`${API_URL}/api/food/products/`, {
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+      cache: 'no-store',
+    })
+
+    if (res.status === 401) {
+      // token invalid/expired
+      redirect('/login')
+    }
+
+    if (!res.ok) {
+      // Log server error body for debugging (don't leak to UI)
+      const txt = await res.text().catch(() => '')
+      console.error('Products fetch failed', res.status, txt)
+      // Avoid redirecting to a non-existent /dashboard route (causes 307 -> 404).
+      // Surface a friendly error message and render an empty list so the page doesn't break.
+      fetchError = `Unable to fetch products (server returned ${res.status})`
+      products = []
+    }
+
+    const data = await res.json().catch(() => null)
+    if (Array.isArray(data)) {
+      products = data
+    } else {
+      console.warn('Unexpected products response', data)
+      products = []
+    }
+  } catch (err) {
+    console.error('Network error fetching products', err)
+    fetchError = 'Network error fetching products'
+  }
+
+  // Fetch user data
+  try {
+    const userRes = await fetch(`${API_URL}/api/me/`, {
+      headers: {
+        Authorization: `Bearer ${token.value}`,
+      },
+      cache: 'no-store',
+    })
+
+    if (userRes.ok) {
+      user = await userRes.json()
+    }
+  } catch (err) {
+    console.error('Error fetching user data', err)
+  }
+
+
+
+
+
+
+
+
 
 
 
@@ -111,7 +178,7 @@ export default async function PartnerStoreDashboard() {
             <h1 className="text-3xl font-bold tracking-tight text-slate-900">
               Dashboard
               <span className="ml-2 align-middle text-sm font-semibold text-lime-700/90">
-                (Foods)
+                (My Products)
               </span>
             </h1>
             <p className="mt-1 text-sm text-slate-600">
@@ -203,7 +270,7 @@ export default async function PartnerStoreDashboard() {
           <Card className="border-orange-100/70 bg-white/70 shadow-sm backdrop-blur">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-base font-bold text-slate-900">
-                Latest Orders
+                Product lists
               </CardTitle>
               <span className="text-xs font-medium text-slate-500">Updated just now</span>
             </CardHeader>
@@ -248,36 +315,119 @@ export default async function PartnerStoreDashboard() {
               </div>
 
               <div className="mt-4 text-sm text-slate-600">
-                Tip: Click an order to open details (we can wire routing next).
+                Note: This is Mockup Product Data
               </div>
             </CardContent>
+
+                        <CardContent>
+              <div className="overflow-hidden rounded-xl border border-orange-100 bg-white">
+                <Table>
+                            <TableHeader>
+          <TableRow>
+            <TableHead>Img</TableHead>
+            <TableHead>Name</TableHead>
+            <TableHead>Description</TableHead>
+            <TableHead className="text-right">Price</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {products.map((product: any) => (
+            <TableRow key={product.id}>
+              <TableCell>
+                <img
+                  src={product.image}
+                  alt={product.title}
+                  className="w-16 h-16 object-cover rounded"
+                />
+              </TableCell>
+              <TableCell>{product.title || "-"}</TableCell>
+              <TableCell>
+                {product.description
+                  ? product.description.slice(0, 60) +
+                    (product.description.length > 60 ? "..." : "")
+                  : "-"}
+              </TableCell>
+              <TableCell className="text-right">
+                {product.price}
+              </TableCell>
+              <TableCell className="text-center space-x-2">
+                <Button variant="ghost" size="sm">Edit</Button>
+                <Button variant="ghost" size="icon">
+                  <Trash2 className="h-4 w-4" />
+                </Button>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+
+                </Table>
+              </div>
+
+              <div className="mt-4 text-sm text-slate-600">
+                  Note: This is Mockup Product Data
+              </div>
+            </CardContent>
+
+
+
           </Card>
 
           {/* Latest Products/Posts */}
           <Card className="border-orange-100/70 bg-white/70 shadow-sm backdrop-blur">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-base font-bold text-slate-900">
-                   My Profile - @{user.email}
+                Latest Products & Posts
               </CardTitle>
               <span className="text-xs font-medium text-slate-500">Last 7 days</span>
             </CardHeader>
 
-                     <CardContent className="space-y-4">
+            <CardContent className="space-y-4">
+              <div className="grid gap-3">
+                {recentItems.map((item) => (
+                  <div
+                    key={item.id}
+                    className="flex items-center gap-4 rounded-2xl border border-orange-100 bg-white p-3 shadow-sm transition hover:shadow-md"
+                  >
+                    {/* Image / placeholder */}
+                    <div className="relative h-12 w-12 overflow-hidden rounded-xl border border-orange-100 bg-gradient-to-br from-orange-100 to-amber-50">
+                      {/* If you want Next/Image later, we can swap this. Keeping <img> simple for now. */}
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="h-full w-full object-cover opacity-90"
+                      />
+                    </div>
 
-         
-                       {/* Small “callout” panel like admin templates */}
-                       <div className="rounded-2xl border border-orange-200/80 bg-gradient-to-r from-orange-50 to-amber-50 p-4">
-                         <p className="text-sm font-semibold text-slate-900">
-                           My Infomations: @{user.email} ✨
-                         </p>
-             <p className="text-gray-600">My ID: {user.id}</p>
-              <p className="text-gray-600">My Store: {user.is_partner ? 'Yes' : 'No'} My Shop ID{user.id}</p>
-              <p className="text-gray-600">My Orders: {user.is_customer ? 'Yes' : 'No'}</p>
-                         <p className="mt-1 text-sm text-slate-600">
-                           My Store Address
-                         </p>
-                       </div>
-                     </CardContent>
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate font-semibold text-slate-900">{item.title}</p>
+                      <div className="mt-1 flex items-center gap-2">
+                        <Badge
+                          variant="outline"
+                          className="rounded-full border-orange-200 bg-orange-50 text-orange-800"
+                        >
+                          {item.type}
+                        </Badge>
+                        <span className="text-xs text-slate-500">• added recently</span>
+                      </div>
+                    </div>
+
+                    <div className="text-xs font-semibold text-orange-700 hover:text-orange-800">
+                      View
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Small “callout” panel like admin templates */}
+              <div className="rounded-2xl border border-orange-200/80 bg-gradient-to-r from-orange-50 to-amber-50 p-4">
+                <p className="text-sm font-semibold text-slate-900">
+                  Next step: make this dashboard feel alive ✨
+                </p>
+                <p className="mt-1 text-sm text-slate-600">
+                  We can add: mini chart card, top sellers, map widget, and “export” actions (like your Pinterest template screenshot).
+                </p>
+              </div>
+            </CardContent>
           </Card>
         </div>
       </div>

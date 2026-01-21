@@ -24,7 +24,7 @@ const navigation = [
   { name: 'Admin Users', href: '/admindashboard', icon: UserCheck },
   { name: 'Creators', href: '/admindashboard', icon: Paintbrush },
   { name: 'Vendors Stores', href: '/admindashboard', icon: Store },
-  { name: 'Products', href: '/products', icon: Package},
+  { name: 'Products', href: '/admindashboard/products', icon: Package},
   { name: 'Customers', href: '/admindashboard', icon: ShoppingCart },
   { name: 'Roles & Permissions', href: '/admindashboard', icon: DoorOpen },
 ]
