@@ -20,8 +20,8 @@ import {
 } from 'lucide-react'
 
 const navigation = [
-  { name: 'Home', href: '/entry-doorway', icon: Home },
-  { name: 'Admin Users', href: '/admindashboard', icon: UserCheck },
+  { name: 'Home', href: '/admindashboard', icon: Home },
+  { name: 'Userprofiles', href: 'admindashboard/user-profiles', icon: UserCheck },
   { name: 'Creators', href: '/admindashboard', icon: Paintbrush },
   { name: 'Vendors Stores', href: '/admindashboard', icon: Store },
   { name: 'Products', href: '/admindashboard/products', icon: Package},

@@ -2,7 +2,7 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { Trash2 } from "lucide-react"
+import { Trash2, Users } from "lucide-react"
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -62,7 +62,7 @@ function statusBadgeClass(status: string) {
   }
 }
 
-export default async function FoodVendorDashboard() {
+export default async function UserProfileDashboard() {
       const cookieStore = await cookies()
   const token = cookieStore.get('access_token')
   const API_URL = process.env.API_URL || 'https://api.somtammarket.com';
@@ -72,26 +72,20 @@ export default async function FoodVendorDashboard() {
     redirect('/login')
   }
 
-  type Product = {
-    id: string | number
-    title?: string
-    description?: string
-    price?: number
-    image?: string
-  }
+
 
   type User = {
     id: string | number
     email: string
   }
 
-let products: Product[] = []
+let users: User[] = []
 let user: User | null = null
 let fetchError: string | null = null
 
 
   try {
-    const res = await fetch(`${API_URL}/api/food/products/`, {
+    const res = await fetch(`${API_URL}api/food/userprofiles/`, {
       headers: {
         Authorization: `Bearer ${token.value}`,
       },
@@ -106,19 +100,19 @@ let fetchError: string | null = null
     if (!res.ok) {
       // Log server error body for debugging (don't leak to UI)
       const txt = await res.text().catch(() => '')
-      console.error('Products fetch failed', res.status, txt)
+      console.error('Users fetch failed', res.status, txt)
       // Avoid redirecting to a non-existent /dashboard route (causes 307 -> 404).
       // Surface a friendly error message and render an empty list so the page doesn't break.
       fetchError = `Unable to fetch products (server returned ${res.status})`
-      products = []
+      users = []
     }
 
     const data = await res.json().catch(() => null)
     if (Array.isArray(data)) {
-      products = data
+      users = data
     } else {
       console.warn('Unexpected products response', data)
-      products = []
+      users = []
     }
   } catch (err) {
     console.error('Network error fetching products', err)
@@ -319,36 +313,39 @@ let fetchError: string | null = null
               </div>
             </CardContent>
 
-                        <CardContent>
+  
+            {/* User Profile Data */}
+
+                                    <CardContent>
               <div className="overflow-hidden rounded-xl border border-orange-100 bg-white">
                 <Table>
                             <TableHeader>
-          <TableRow className="bg-orange-50/70 hover:bg-orange-50/70">
-            <TableHead>Img</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Description</TableHead>
-            <TableHead className="text-right">Price</TableHead>
+          <TableRow>
+            <TableHead>Avatar</TableHead>
+            <TableHead>user</TableHead>
+            <TableHead>email</TableHead>
+            <TableHead className="text-right">ID</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {products.map((product: any) => (
-            <TableRow key={product.id}>
+          {users.map((user: any) => (
+            <TableRow key={user.id}>
               <TableCell>
                 <img
-                  src={product.image}
-                  alt={product.title}
+                  src={user.avatar}
+                  alt={user.id}
                   className="w-16 h-16 object-cover rounded"
                 />
               </TableCell>
-              <TableCell>{product.title || "-"}</TableCell>
+              <TableCell>{user.id || "-"}</TableCell>
               <TableCell>
-                {product.description
-                  ? product.description.slice(0, 60) +
-                    (product.description.length > 60 ? "..." : "")
+                {user.email
+                  ? user.bio.slice(0, 40) +
+                    (user.bio.length > 40 ? "..." : "")
                   : "-"}
               </TableCell>
               <TableCell className="text-right">
-                {product.price}
+                {user.id}
               </TableCell>
               <TableCell className="text-center space-x-2">
                 <Button variant="ghost" size="sm">Edit</Button>

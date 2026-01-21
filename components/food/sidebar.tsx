@@ -17,12 +17,12 @@ import {
 } from 'lucide-react'
 
 const navigation = [
-  { name: 'Home', href: '/entry-doorway', icon: Home },
-  { name: 'Products', href: '/stm-admin/products', icon: Package },
-  { name: 'Partner Stores', href: '/stm-admin/stores', icon: Store },
-  { name: 'Store Locations', href: '/stm-admin/stores/locations', icon: MapPin },
-  { name: 'Orders', href: '/stm-admin/orders', icon: ShoppingCart },
-  { name: 'Posts', href: '/stm-admin/posts', icon: FileText },
+  { name: 'Home', href: '/food-dashboard', icon: Home },
+  { name: 'My Products', href: '/products', icon: Package },
+  { name: 'Partner Stores', href: '/food-dashboard', icon: Store },
+  { name: 'Store Locations', href: '/food-dashboard', icon: MapPin },
+  { name: 'Orders', href: '/food-dashboard', icon: ShoppingCart },
+  { name: 'Posts', href: '/food-dashboard', icon: FileText },
 ]
 
 export function Sidebar() {
