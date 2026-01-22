@@ -1,8 +1,9 @@
 // app/admindashboard/page.tsx
 
+
+
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-
 
 
 
@@ -21,27 +22,26 @@ import {
   TrendingDown,
   Store,
   Package,
-  ArrowUpRight,
-  UserCheck,
-  Paintbrush,
   ShoppingCart,
+  FileText,
+  ArrowUpRight,
 } from 'lucide-react'
 
 // Mock data
 const stats = [
-  { title: 'Admin User', value: 2, change: 10, changeType: 'increase' as const, icon: UserCheck },
-  { title: 'Creators', value: 1, change: -3, changeType: 'decrease' as const, icon: Paintbrush },
-  { title: 'Vendors', value: 3, change: 8, changeType: 'increase' as const, icon: Store },
-  { title: 'Partner', value: 2, change: 15, changeType: 'increase' as const, icon: Package },
-  { title: 'Customers', value: 2, change: 15, changeType: 'increase' as const, icon: ShoppingCart },
+  { title: 'Stores', value: 24, change: 12, changeType: 'increase' as const, icon: Store },
+  { title: 'Products', value: 156, change: -3, changeType: 'decrease' as const, icon: Package },
+  { title: 'Orders', value: 89, change: 8, changeType: 'increase' as const, icon: ShoppingCart },
+  { title: 'Posts', value: 42, change: 15, changeType: 'increase' as const, icon: FileText },
 ]
 
 const recentOrders = [
-  { id: 'ORD-001', customer: 'John Doe', email: 'John Doe@gmail.com',status: 'Completed' },
-  { id: 'ORD-002', customer: 'Jane Smith', email: 'John Doe@gmail.com',status: 'Pending' },
-  { id: 'ORD-003', customer: 'Bob Johnson', email: 'John Doe@gmail.com',status: 'Shipped' },
-  { id: 'ORD-004', customer: 'Alice Brown', email: 'John Doe@gmail.com',status: 'Processing' },
+  { id: 'ORD-001', customer: 'John Doe', status: 'Completed', amount: '$129.99' },
+  { id: 'ORD-002', customer: 'Jane Smith', status: 'Pending', amount: '$79.50' },
+  { id: 'ORD-003', customer: 'Bob Johnson', status: 'Shipped', amount: '$299.99' },
+  { id: 'ORD-004', customer: 'Alice Brown', status: 'Processing', amount: '$49.99' },
 ]
+
 const recentItems = [
   { id: '1', title: 'Wireless Headphones', type: 'Product', image: '/placeholder.jpg' },
   { id: '2', title: 'Summer Sale Post', type: 'Post', image: '/placeholder.jpg' },
@@ -53,21 +53,20 @@ function statusBadgeClass(status: string) {
   // Warm orange theme + calm neutrals (like modern admin templates)
   switch (status) {
     case 'Completed':
-      return 'bg-emerald-50 text-emerald-700 border-emerald-200'
+      return 'bg-lime-50 text-lime-700 border-lime-200'
     case 'Pending':
-      return 'bg-amber-50 text-amber-800 border-amber-200'
+      return 'bg-lime-50 text-amber-800 border-lime-200'
     case 'Shipped':
       return 'bg-sky-50 text-sky-700 border-sky-200'
     case 'Processing':
-      return 'bg-orange-50 text-orange-800 border-orange-200'
+      return 'bg-orange-50 text-lime-800 border-lime-200'
     default:
       return 'bg-slate-50 text-slate-700 border-slate-200'
   }
 }
 
-export default async function AdminDashboard() {
-
-const token = (await cookies()).get('access_token');
+export default async function AdminSTMDashboard() {
+  const token = (await cookies()).get('access_token');
 
  if (!token?.value) redirect('/login');
 
@@ -85,14 +84,25 @@ const token = (await cookies()).get('access_token');
 
   const user = await res.json();
 
+
+
+
+
+
+
+
+
+
+
+
   return (
     <div className="relative">
       {/* Soft warm background like your STM orange vibe */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-orange-200/40 blur-3xl" />
-        <div className="absolute top-40 -left-24 h-72 w-72 rounded-full bg-amber-200/30 blur-3xl" />
-        <div className="absolute bottom-0 right-10 h-80 w-80 rounded-full bg-orange-100/40 blur-3xl" />
-        <div className="absolute inset-0 bg-gradient-to-b from-orange-50/70 via-white to-white" />
+        <div className="absolute -top-24 -right-24 h-72 w-72 rounded-full bg-lime-200/40 blur-3xl" />
+        <div className="absolute top-40 -left-24 h-72 w-72 rounded-full bg-lime-200/30 blur-3xl" />
+        <div className="absolute bottom-0 right-10 h-80 w-80 rounded-full bg-lime-100/40 blur-3xl" />
+        <div className="absolute inset-0 bg-gradient-to-b from-lime-50/70 via-white to-white" />
       </div>
 
       <div className="space-y-6">
@@ -102,12 +112,12 @@ const token = (await cookies()).get('access_token');
             <p className="text-sm text-slate-500">Admin • Overview</p>
             <h1 className="text-3xl font-bold tracking-tight text-slate-900">
               Dashboard
-              <span className="ml-2 align-middle text-sm font-semibold text-orange-700/90">
-                (STM-Admin)
+              <span className="ml-2 align-middle text-sm font-semibold text-lime-700/90">
+                (Foods)
               </span>
             </h1>
             <p className="mt-1 text-sm text-slate-600">
-              A quick look at Admin User, Vendors, Creators, Partner and Roles & Permissions.
+              A quick look at stores, restaurangs,products, orders, and content performance.
             </p>
           </div>
 
@@ -119,7 +129,7 @@ const token = (await cookies()).get('access_token');
             <button className="rounded-full border border-orange-200 bg-white/70 px-3 py-1.5 text-sm font-medium text-slate-700 shadow-sm backdrop-blur hover:bg-white">
               This week
             </button>
-            <button className="rounded-full border border-orange-200 bg-orange-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-700">
+            <button className="rounded-full border border-orange-200 bg-lime-600 px-3 py-1.5 text-sm font-semibold text-white shadow-sm hover:bg-orange-700">
               This month
             </button>
           </div>
@@ -133,10 +143,10 @@ const token = (await cookies()).get('access_token');
             return (
               <Card
                 key={stat.title}
-                className="group relative overflow-hidden border-orange-100/70 bg-white/70 shadow-sm backdrop-blur transition hover:shadow-md"
+                className="group relative overflow-hidden border-lime-100/70 bg-white/70 shadow-sm backdrop-blur transition hover:shadow-md"
               >
                 {/* subtle top accent */}
-                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-orange-500 via-amber-400 to-orange-200 opacity-70" />
+                <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-lime-500 via-lime-400 to-lime-200 opacity-70" />
 
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-3">
                   <CardTitle className="text-sm font-semibold text-slate-700">
@@ -144,7 +154,7 @@ const token = (await cookies()).get('access_token');
                   </CardTitle>
 
                   <div className="flex items-center gap-2">
-                    <div className="grid h-9 w-9 place-items-center rounded-xl border border-orange-100 bg-orange-50 text-orange-700">
+                    <div className="grid h-9 w-9 place-items-center rounded-xl border border-lime-100 bg-lime-50 text-lime-700">
                       <Icon className="h-4 w-4" />
                     </div>
                     {isUp ? (
@@ -175,9 +185,9 @@ const token = (await cookies()).get('access_token');
                   <p className="text-xs text-slate-500">Compared to last month</p>
 
                   {/* mini progress bar vibe */}
-                  <div className="h-2 w-full rounded-full bg-orange-100/60">
+                  <div className="h-2 w-full rounded-full bg-lime-100/60">
                     <div
-                      className="h-2 rounded-full bg-gradient-to-r from-orange-600 to-amber-400"
+                      className="h-2 rounded-full bg-gradient-to-r from-lime-600 to-lime-400"
                       style={{
                         width: `${Math.min(100, Math.max(8, Math.abs(stat.change) * 6))}%`,
                       }}
@@ -195,7 +205,7 @@ const token = (await cookies()).get('access_token');
           <Card className="border-orange-100/70 bg-white/70 shadow-sm backdrop-blur">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-base font-bold text-slate-900">
-                Recent Creators
+                Latest Orders
               </CardTitle>
               <span className="text-xs font-medium text-slate-500">Updated just now</span>
             </CardHeader>
@@ -204,33 +214,23 @@ const token = (await cookies()).get('access_token');
               <div className="overflow-hidden rounded-xl border border-orange-100 bg-white">
                 <Table>
                   <TableHeader>
-                <TableRow className="bg-orange-50/70 hover:bg-orange-50/70">
+                    <TableRow className="bg-orange-50/70 hover:bg-orange-50/70">
                       <TableHead className="text-slate-700">Order ID</TableHead>
-                      <TableHead className="text-slate-700">Username</TableHead>
-                      <TableHead className="text-slate-700">Email</TableHead>
+                      <TableHead className="text-slate-700">Customer</TableHead>
                       <TableHead className="text-slate-700">Status</TableHead>
-                 
+                      <TableHead className="text-right text-slate-700">Amount</TableHead>
                     </TableRow>
                   </TableHeader>
 
                   <TableBody>
                     {recentOrders.map((order) => (
                       <TableRow key={order.id} className="hover:bg-orange-50/40">
-
                         <TableCell className="font-semibold text-slate-900">
                           {order.id}
                         </TableCell>
-
-                        <TableCell className="text-slate-700">{order.customer}
-
-                        </TableCell>
-
-                       
-                           <TableCell className="text-left font-semibold text-slate-900">
-                          {order.email}
-                        </TableCell>
-                         <TableCell>
-                             <Badge
+                        <TableCell className="text-slate-700">{order.customer}</TableCell>
+                        <TableCell>
+                          <Badge
                             variant="outline"
                             className={[
                               'rounded-full px-2.5 py-1 text-xs font-semibold',
@@ -240,8 +240,9 @@ const token = (await cookies()).get('access_token');
                             {order.status}
                           </Badge>
                         </TableCell>
-                       
-                       
+                        <TableCell className="text-right font-semibold text-slate-900">
+                          {order.amount}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -258,121 +259,28 @@ const token = (await cookies()).get('access_token');
           <Card className="border-orange-100/70 bg-white/70 shadow-sm backdrop-blur">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-base font-bold text-slate-900">
-                Latest Products & Posts
+                   My Profile - @{user.email}
               </CardTitle>
               <span className="text-xs font-medium text-slate-500">Last 7 days</span>
             </CardHeader>
 
-            <CardContent className="space-y-4">
-              <div className="grid gap-3">
-                {recentItems.map((item) => (
-                  <div
-                    key={item.id}
-                    className="flex items-center gap-4 rounded-2xl border border-orange-100 bg-white p-3 shadow-sm transition hover:shadow-md"
-                  >
-                    {/* Image / placeholder */}
-                    <div className="relative h-12 w-12 overflow-hidden rounded-xl border border-orange-100 bg-gradient-to-br from-orange-100 to-amber-50">
-                      {/* If you want Next/Image later, we can swap this. Keeping <img> simple for now. */}
-                      <img
-                        src={item.image}
-                        alt={item.title}
-                        className="h-full w-full object-cover opacity-90"
-                      />
-                    </div>
+                     <CardContent className="space-y-4">
 
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate font-semibold text-slate-900">{item.title}</p>
-                      <div className="mt-1 flex items-center gap-2">
-                        <Badge
-                          variant="outline"
-                          className="rounded-full border-orange-200 bg-orange-50 text-orange-800"
-                        >
-                          {item.type}
-                        </Badge>
-                        <span className="text-xs text-slate-500">• added recently</span>
-                      </div>
-                    </div>
-
-                    <div className="text-xs font-semibold text-orange-700 hover:text-orange-800">
-                      View
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Small “callout” panel like admin templates */}
-              <div className="rounded-2xl border border-orange-200/80 bg-gradient-to-r from-orange-50 to-amber-50 p-4">
-                <p className="text-sm font-semibold text-slate-900">
-                  Next step: make this dashboard feel alive ✨
-                </p>
-                <p className="mt-1 text-sm text-slate-600">
-                  We can add: mini chart card, top sellers, map widget, and “export” actions (like your Pinterest template screenshot).
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-          {/* Implement Database */}
-          <Card className="border-orange-100/70 bg-white/70 shadow-sm backdrop-blur">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-base font-bold text-slate-900">
-                Welcome Back - {user.username}
-              </CardTitle>
-              <span className="text-xs font-medium text-slate-500">Last 7 days</span>
-            </CardHeader>
-
-            <CardContent className="space-y-4">
-              <div className="grid gap-3">
-                {recentItems.map((item) => (
-                  <div
-                    key={user.id}
-                    className="flex items-center gap-4 rounded-2xl border border-orange-100 bg-white p-3 shadow-sm transition hover:shadow-md"
-                  >
-                    {/* Image / placeholder */}
-                    <div className="relative h-12 w-12 overflow-hidden rounded-xl border border-orange-100 bg-gradient-to-br from-orange-100 to-amber-50">
-                      {/* If you want Next/Image later, we can swap this. Keeping <img> simple for now. */}
-                      <img
-                        src={item.image}
-                        alt={user.username}
-                        className="h-full w-full object-cover opacity-90"
-                      />
-                    </div>
-
-                    <div className="min-w-0 flex-1">
-                      <p className="truncate font-semibold text-slate-900">{user.email}</p>
-                      <div className="mt-1 flex items-center gap-2">
-                        <Badge
-                          variant="outline"
-                          className="rounded-full border-orange-200 bg-orange-50 text-orange-800"
-                        >
-                          {item.type}
-                        </Badge>
-                        <span className="text-xs text-slate-500">• added recently</span>
-                      </div>
-                    </div>
-
-                    <div className="text-xs font-semibold text-orange-700 hover:text-orange-800">
-                      View
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Small “callout” panel like admin templates */}
-              <div className="rounded-2xl border border-orange-200/80 bg-gradient-to-r from-orange-50 to-amber-50 p-4">
-                <p className="text-sm font-semibold text-slate-900">
-                  Next step: make this dashboard feel alive ✨
-                </p>
-    <p className="text-gray-600">User ID: {user.id}</p>
-     <p className="text-gray-600">Partner: {user.is_partner ? 'Yes' : 'No'}</p>
-     <p className="text-gray-600">Customer: {user.is_customer ? 'Yes' : 'No'}</p>
-                <p className="mt-1 text-sm text-slate-600">
-                  We can add: mini chart card, top sellers, map widget, and “export” actions (like your Pinterest template screenshot).
-                </p>
-              </div>
-            </CardContent>
-          </Card>
          
-         
+                       {/* Small “callout” panel like admin templates */}
+                       <div className="rounded-2xl border border-orange-200/80 bg-gradient-to-r from-orange-50 to-amber-50 p-4">
+                         <p className="text-sm font-semibold text-slate-900">
+                           My Infomations: @{user.email} ✨
+                         </p>
+             <p className="text-gray-600">My ID: {user.id}</p>
+              <p className="text-gray-600">My Store: {user.is_partner ? 'Yes' : 'No'} My Shop ID{user.id}</p>
+              <p className="text-gray-600">My Orders: {user.is_customer ? 'Yes' : 'No'}</p>
+                         <p className="mt-1 text-sm text-slate-600">
+                           My Store Address
+                         </p>
+                       </div>
+                     </CardContent>
+          </Card>
         </div>
       </div>
     </div>

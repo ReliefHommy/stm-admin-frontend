@@ -16,9 +16,9 @@ import {
   Home
 } from 'lucide-react'
 
-const navigation = [
+const navigation = [ 
   { name: 'Home', href: '/food-dashboard', icon: Home },
-  { name: 'My Products', href: '/products', icon: Package },
+  { name: 'My Products', href: '/food-dashboard/products', icon: Store },
   { name: 'Partner Stores', href: '/food-dashboard', icon: Store },
   { name: 'Store Locations', href: '/food-dashboard', icon: MapPin },
   { name: 'Orders', href: '/food-dashboard', icon: ShoppingCart },
@@ -40,7 +40,7 @@ export function Sidebar() {
           variant="ghost"
           size="sm"
           onClick={() => setCollapsed(!collapsed)}
-          className="text-white hover:bg-gray-800"
+          className="text-white hover:bg-lime-600"
         >
           {collapsed ? <ChevronRight className="h-4 w-4" /> : <ChevronLeft className="h-4 w-4" />}
         </Button>
