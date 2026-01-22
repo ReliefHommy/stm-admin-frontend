@@ -3,6 +3,7 @@
 import * as React from "react";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 type UserProfile = {
   id: number;
@@ -10,7 +11,7 @@ type UserProfile = {
   user_id?: number | null;
   email?: string | null;
 
-  is_partner?: boolean;
+  is_vendor?: boolean;
   is_customer?: boolean;
 
   phone?: string | null;
@@ -50,7 +51,17 @@ export default function UserProfilesPage() {
   }, []);
 
   return (
-    <div className="overflow-hidden rounded-xl border border-orange-100 bg-white">
+
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+     <Card className="border-orange-100/70 bg-white/70 shadow-sm backdrop-blur">    
+                    <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="text-base font-bold text-slate-900">
+                Latest Orders
+              </CardTitle>
+              <span className="text-xs font-medium text-slate-500">Updated just now</span>
+            </CardHeader>
+     <CardContent>
+      <div className="overflow-hidden rounded-xl border border-orange-100 bg-white">
       <Table>
         <TableHeader>
           <TableRow>
@@ -121,7 +132,12 @@ export default function UserProfilesPage() {
       </Table>
     
     
-    </div>
+    </div></CardContent> 
+    </Card>
+
+    
+    
+     </div>
     
   );
 }
