@@ -2,26 +2,25 @@
 
 import * as React from "react";
 import { Table, TableHeader, TableBody, TableRow, TableHead, TableCell } from "@/components/ui/table";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-type UserProfileRow = {
-  id: number; // profile id
-  avatar?: string | null;
+type UserProfile = {
+  id: number;
+
+  user_id?: number | null;
+  email?: string | null;
+
+  is_partner?: boolean;
+  is_customer?: boolean;
+
   phone?: string | null;
+  avatar?: string | null;
   address?: string | null;
-
-  user: {
-    id: number;
-    email: string;
-    is_partner: boolean;
-    is_customer: boolean;
-  };
 };
 
 
-
 export default function UserProfilesPage() {
-  const [users, setUsers] = React.useState<UserProfileRow[]>([]);
+  const [users, setUsers] = React.useState<UserProfile[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState<string | null>(null);
 
@@ -51,16 +50,6 @@ export default function UserProfilesPage() {
   }, []);
 
   return (
-    <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
-        {/* User Profiles */}
-       <Card className="border-orange-100/70 bg-white/70 shadow-sm backdrop-blur">
-                <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle className="text-base font-bold text-slate-900">
-                User Profiles
-              </CardTitle>
-              <span className="text-xs font-medium text-slate-500">Updated just now</span>
-            </CardHeader>
-    <CardContent>
     <div className="overflow-hidden rounded-xl border border-orange-100 bg-white">
       <Table>
         <TableHeader>
@@ -69,9 +58,9 @@ export default function UserProfilesPage() {
             <TableHead>User ID</TableHead>
             <TableHead className="text-right">Profile ID</TableHead>
             <TableHead>Email</TableHead>
-            <TableHead>Somethings</TableHead>
+            <TableHead>User Rolle</TableHead>
            
-            <TableHead className="text-center">User Rolle</TableHead>
+            <TableHead className="text-center">Actions</TableHead>
           </TableRow>
         </TableHeader>
 
@@ -97,13 +86,13 @@ export default function UserProfilesPage() {
           )}
 
           {!loading && !error && users.map((p) => (
-            <TableRow key={p.id}>
+            <TableRow key={p.user_id}>
                 {/* Avatar Cell */}
               <TableCell>
                 {p.avatar ? (
                   <img
                     src={p.avatar}
-                    alt={`profile-${p.id}`}
+                    alt={`profile-${p.user_id}`}
                     className="w-16 h-16 object-cover rounded"
                   />
                 ) : (
@@ -111,35 +100,28 @@ export default function UserProfilesPage() {
                 )}
               </TableCell>
   {/* user_id Cell */}
-             <TableCell>{p.id ?? "-"}</TableCell>
+             <TableCell>{p.user_id ?? "-"}</TableCell>
   {/* profile:id cell */}
 
               <TableCell className="text-right">{p.id}</TableCell>
     {/* email Cell */}
-              <TableCell>{p.phone ?? "-"}</TableCell>
-  {/* Something */}
+              <TableCell>{p.email ?? "-"}</TableCell>
+  {/* Boolean */}
 
-              <TableCell>{ p.id} </TableCell>
+              <TableCell>{ p.user_id} </TableCell>
 
 
               <TableCell className="text-center space-x-2">
-             <p className="text-gray-600">Partner: Partner: {p.user.is_partner ? "Yes" : "No"} · My Shop ID {p.user.email}</p>
-              <p className="text-gray-600">Customer: {p.user.is_customer ? "Yes" : "No"}</p>
+                <Button variant="ghost" size="sm">Edit</Button>
+                <Button variant="ghost" size="sm">Delete</Button>
               </TableCell>
             </TableRow>
           ))}
         </TableBody>
       </Table>
-
-
-      
     
     
     </div>
-    </CardContent>
-    </Card>
-        </div>
-    
     
   );
 }

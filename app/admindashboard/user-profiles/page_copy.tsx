@@ -10,7 +10,7 @@ type UserProfile = {
   user_id?: number | null;
   email?: string | null;
 
-  is_vendor?: boolean;
+  is_partner?: boolean;
   is_customer?: boolean;
 
   phone?: string | null;
