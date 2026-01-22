@@ -75,60 +75,68 @@ export default function UserProfilesPage() {
           </TableRow>
         </TableHeader>
 
-        <TableBody>
-          {loading && (
-            <TableRow>
-              <TableCell colSpan={6}>Loading…</TableCell>
-            </TableRow>
-          )}
+    <TableBody>
+  {loading && (
+    <TableRow>
+      <TableCell colSpan={6}>Loading…</TableCell>
+    </TableRow>
+  )}
 
-          {!loading && error && (
-            <TableRow>
-              <TableCell colSpan={6} className="text-red-600">
-                {error}
-              </TableCell>
-            </TableRow>
-          )}
+  {!loading && error && (
+    <TableRow>
+      <TableCell colSpan={6} className="text-red-600">
+        {error}
+      </TableCell>
+    </TableRow>
+  )}
 
-          {!loading && !error && users.length === 0 && (
-            <TableRow>
-              <TableCell colSpan={6}>No profiles found.</TableCell>
-            </TableRow>
-          )}
+  {!loading && !error && users.length === 0 && (
+    <TableRow>
+      <TableCell colSpan={6}>No profiles found.</TableCell>
+    </TableRow>
+  )}
 
-          {!loading && !error && users.map((p) => (
-            <TableRow key={p.user_id}>
-                {/* Avatar Cell */}
-              <TableCell>
-                {p.avatar ? (
-                  <img
-                    src={p.avatar}
-                    alt={`profile-${p.user_id}`}
-                    className="w-16 h-16 object-cover rounded"
-                  />
-                ) : (
-                  <div className="w-16 h-16 rounded bg-gray-100" />
-                )}
-              </TableCell>
-  {/* user_id Cell */}
-             <TableCell>{p.user_id ?? "-"}</TableCell>
-  {/* profile:id cell */}
+  {!loading && !error && users.map((p) => (
+    <TableRow key={p.id}>
+      {/* Avatar */}
+      <TableCell>
+        {p.avatar ? (
+          <img
+            src={p.avatar}
+            alt={`profile-${p.id}`}
+            className="w-16 h-16 object-cover rounded"
+          />
+        ) : (
+          <div className="w-16 h-16 rounded bg-gray-100" />
+        )}
+      </TableCell>
 
-              <TableCell className="text-right">{p.id}</TableCell>
-    {/* email Cell */}
-              <TableCell>{p.email ?? "-"}</TableCell>
-  {/* Boolean */}
+      {/* User ID */}
+      <TableCell>{p.user_id ?? "-"}</TableCell>
 
-              <TableCell>{ p.user_id} </TableCell>
+      {/* Email */}
+      <TableCell>{p.email ?? "-"}</TableCell>
 
+      {/* Roles (simple text) */}
+      <TableCell>
+        <div className="text-sm text-gray-600">
+          Vendor: {p.is_vendor ? "Yes" : "No"} <br />
+          Customer: {p.is_customer ? "Yes" : "No"}
+        </div>
+      </TableCell>
 
-              <TableCell className="text-center space-x-2">
-                <Button variant="ghost" size="sm">Edit</Button>
-                <Button variant="ghost" size="sm">Delete</Button>
-              </TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
+      {/* Profile ID */}
+      <TableCell className="text-right">{p.id}</TableCell>
+
+      {/* Actions */}
+      <TableCell className="text-center space-x-2">
+        <Button variant="ghost" size="sm">Edit</Button>
+        <Button variant="ghost" size="sm">Delete</Button>
+      </TableCell>
+    </TableRow>
+  ))}
+</TableBody>
+
       </Table>
     
     
