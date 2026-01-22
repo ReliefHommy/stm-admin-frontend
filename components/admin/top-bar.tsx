@@ -117,7 +117,7 @@ export function TopBar() {
             Superuser
           </Badge>
         </div>
-        <Link href={'/logout'}>
+        <Link href={'/login'}>
           <Button variant="ghost" size="sm" onClick={handleLogout}>
             <LogOut className="h-4 w-4 mr-2" />
             Logout
