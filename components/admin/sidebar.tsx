@@ -24,7 +24,7 @@ const navigation = [
   { name: 'Userprofiles', href: 'admindashboard/user-profiles', icon: UserCheck },
   { name: 'Creators', href: '/admindashboard', icon: Paintbrush },
   { name: 'Vendors Stores', href: '/admindashboard', icon: Store },
-  { name: 'Products', href: '/admindashboard/products', icon: Package},
+  { name: 'Vendor Products', href: '/admindashboard/products', icon: Package},
   { name: 'Customers', href: '/admindashboard', icon: ShoppingCart },
   { name: 'Roles & Permissions', href: '/admindashboard', icon: DoorOpen },
 ]
@@ -38,7 +38,7 @@ export function Sidebar() {
       "flex flex-col bg-amber-700 text-white transition-all duration-300",
       collapsed ? "w-16" : "w-64"
     )}>
-      <div className="flex items-center justify-between p-4 border-b border-gray-700">
+      <div className="flex items-center justify-between p-4 border-b border-lime-700">
         {!collapsed && <h2 className="text-lg font-semibold">Admin</h2>}
         <Button
           variant="ghost"

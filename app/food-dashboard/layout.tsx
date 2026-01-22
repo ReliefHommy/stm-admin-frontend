@@ -1,6 +1,7 @@
 // app/food-dashboard/layout.tsx
 
-import { Sidebar } from "@/components/food/sidebar"
+
+import { Sidebar } from "@/components/admin/sidebar"
 import { AdminProvider } from "@/lib/food-context "
 
 

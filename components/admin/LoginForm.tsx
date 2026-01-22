@@ -32,7 +32,7 @@ export default function LoginForm() {
     })
 
     if (r.ok) {
-      router.replace('/entry-doorway')
+      router.replace('/admindashboard')
       return
     }
 
