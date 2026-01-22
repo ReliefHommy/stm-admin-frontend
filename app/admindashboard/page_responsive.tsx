@@ -273,8 +273,8 @@ export default async function AdminSTMDashboard() {
                            My Infomations: @{user.email} ✨
                          </p>
              <p className="text-gray-600">My ID: {user.id}</p>
-              <p className="text-gray-600">Partner: {user.is_partner ? 'Yes' : 'No'} My Shop ID{user.id}</p>
-              <p className="text-gray-600">Customer: {user.is_customer ? 'Yes' : 'No'}</p>
+              <p className="text-gray-600">My Store: {user.is_partner ? 'Yes' : 'No'} My Shop ID{user.id}</p>
+              <p className="text-gray-600">My Orders: {user.is_customer ? 'Yes' : 'No'}</p>
                          <p className="mt-1 text-sm text-slate-600">
                            My Store Address
                          </p>
