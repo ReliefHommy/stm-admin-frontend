@@ -67,9 +67,9 @@ export default function UserProfilesPage() {
           <TableRow>
             <TableHead>Avatar</TableHead>
             <TableHead>User ID</TableHead>
-            <TableHead className="text-right">Profile ID</TableHead>
-            <TableHead>Email</TableHead>
-            <TableHead>User Rolle</TableHead>
+            <TableHead className="text-left">Email</TableHead>
+            <TableHead className="text-left">User Rolle</TableHead>
+            <TableHead>Profile ID</TableHead>
            
             <TableHead className="text-center">Actions</TableHead>
           </TableRow>
