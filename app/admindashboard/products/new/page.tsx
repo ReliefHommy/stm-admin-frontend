@@ -62,7 +62,7 @@ export default function NewProductPage() {
     setSaving(true);
 
     try {
-      const res = await fetch('/api/userprofiles/', {
+      const res = await fetch('/api/userprofile/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
