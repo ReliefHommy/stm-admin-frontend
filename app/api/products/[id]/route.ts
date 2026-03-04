@@ -4,13 +4,17 @@ import { cookies } from 'next/headers';
 const API_URL = process.env.NEXT_PUBLIC_API_BASE || 'https://api.somtammarket.com';
 export const dynamic = 'force-dynamic';
 
-// ✅ GET one product (prefill edit form)
-export async function GET(_req: NextRequest, ctx: { params: { id: string } }) {
+type Ctx = { params: Promise<{ id: string }> };
+
+// ✅ GET one product
+export async function GET(_req: NextRequest, ctx: Ctx) {
   try {
+    const { id } = await ctx.params;
+
     const cookieStore = await cookies();
     const token = cookieStore.get('access_token')?.value;
 
-    const djangoRes = await fetch(`${API_URL}/api/food/products/${ctx.params.id}/`, {
+    const djangoRes = await fetch(`${API_URL}/api/food/products/${id}/`, {
       method: 'GET',
       headers: {
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
@@ -28,9 +32,11 @@ export async function GET(_req: NextRequest, ctx: { params: { id: string } }) {
   }
 }
 
-// ✅ PATCH update product (save edit form)
-export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
+// ✅ PATCH update product
+export async function PATCH(req: NextRequest, ctx: Ctx) {
   try {
+    const { id } = await ctx.params;
+
     const cookieStore = await cookies();
     const token = cookieStore.get('access_token')?.value;
 
@@ -43,14 +49,14 @@ export async function PATCH(req: NextRequest, ctx: { params: { id: string } }) {
 
       if (token) headers.set('Authorization', `Bearer ${token}`);
 
-      djangoRes = await fetch(`${API_URL}/api/food/products/${ctx.params.id}/`, {
+      djangoRes = await fetch(`${API_URL}/api/food/products/${id}/`, {
         method: 'PATCH',
         headers,
         body: req.body,
       } as any);
     } else {
       const json = await req.json();
-      djangoRes = await fetch(`${API_URL}/api/food/products/${ctx.params.id}/`, {
+      djangoRes = await fetch(`${API_URL}/api/food/products/${id}/`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
