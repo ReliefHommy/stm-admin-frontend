@@ -153,7 +153,7 @@ return (
               </TableCell>
 <TableCell className="text-center space-x-2">
   <Button asChild variant="ghost" size="sm">
-    <Link href={`/admindashboard/products/${product.id}/edit`}>Edit</Link>
+    <Link href={`/admindashboard/products/${product.slug}/edit`}>Edit</Link>
   </Button>
 
   <Button variant="ghost" size="icon">
