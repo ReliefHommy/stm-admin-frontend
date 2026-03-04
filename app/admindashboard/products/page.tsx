@@ -151,12 +151,15 @@ return (
               <TableCell className="text-right">
                 {product.price}
               </TableCell>
-              <TableCell className="text-center space-x-2">
-                <Button variant="ghost" size="sm">Edit</Button>
-                <Button variant="ghost" size="icon">
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </TableCell>
+<TableCell className="text-center space-x-2">
+  <Button asChild variant="ghost" size="sm">
+    <Link href={`/admindashboard/products/${product.id}/edit`}>Edit</Link>
+  </Button>
+
+  <Button variant="ghost" size="icon">
+    <Trash2 className="h-4 w-4" />
+  </Button>
+</TableCell>
             </TableRow>
           ))}
         </TableBody>
