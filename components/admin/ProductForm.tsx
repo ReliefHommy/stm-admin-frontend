@@ -1,3 +1,4 @@
+//app/components/admin/ProductForm.tsx
 'use client';
 
 import { useEffect, useState } from 'react';
@@ -79,14 +80,13 @@ export default function ProductForm({
           credentials: 'include',
         });
 
-        const text = await res.text();
-        const data = text ? JSON.parse(text) : null;
-
         if (res.status === 401) {
-          setError('Unauthorized — you must be logged in.');
           router.push('/login');
           return;
         }
+
+        const text = await res.text();
+        const data = text ? JSON.parse(text) : null;
 
         if (!res.ok) {
           setError(data?.detail || data?.error || 'Failed to load product');
@@ -142,7 +142,6 @@ export default function ProductForm({
       });
 
       if (res.status === 401) {
-        setError('Unauthorized — you must be logged in.');
         router.push('/login');
         return;
       }
