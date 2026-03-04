@@ -62,7 +62,7 @@ export default function NewProductPage() {
     setSaving(true);
 
     try {
-      const res = await fetch('/api/userprofile/', {
+      const res = await fetch('/api/products/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ export default function NewProductPage() {
         return;
       }
 
-      router.push('/vendor/products/');
+      router.push('/admindashboard/products/');
     } catch (err: any) {
       setError(err?.message || 'An error occurred while saving the product.');
     } finally {

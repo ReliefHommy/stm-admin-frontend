@@ -9,7 +9,7 @@ export async function GET() {
   try {
     const token = (await cookies()).get("access_token")?.value;
 
-    const djangoRes = await fetch(`${API_BASE}/api/food/userprofile/`, {
+    const djangoRes = await fetch(`${API_BASE}/api/food/userprofiles/`, {
       method: "GET",
       headers: {
         "Accept": "application/json",

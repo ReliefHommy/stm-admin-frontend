@@ -1,4 +1,4 @@
-//app/admindashboard/vendor-products/page.tsx
+//app/admindashboard/products/page.tsx
 
 
 
