@@ -1,9 +1,26 @@
 // app/admindashboard/page.tsx
+"use client";
 
 
-
+import * as React from "react";
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
+import { Button } from "@/components/ui/button";
+
+type UserProfile = {
+  id: number;
+
+  user_id?: number | null;
+  email?: string | null;
+
+  is_vendor?: boolean;
+  is_customer?: boolean;
+
+  phone?: string | null;
+  avatar?: string | null;
+  address?: string | null;
+};
+
 
 
 
@@ -22,16 +39,16 @@ import {
   TrendingDown,
   Store,
   Package,
-  ShoppingCart,
   FileText,
   ArrowUpRight,
+  UserX2Icon,
 } from 'lucide-react'
 
 // Mock data
 const stats = [
   { title: 'Stores', value: 24, change: 12, changeType: 'increase' as const, icon: Store },
   { title: 'Products', value: 156, change: -3, changeType: 'decrease' as const, icon: Package },
-  { title: 'Orders', value: 89, change: 8, changeType: 'increase' as const, icon: ShoppingCart },
+  { title: 'Users', value: 89, change: 8, changeType: 'increase' as const, icon: UserX2Icon },
   { title: 'Posts', value: 42, change: 15, changeType: 'increase' as const, icon: FileText },
 ]
 
@@ -67,6 +84,10 @@ function statusBadgeClass(status: string) {
 
 export default async function AdminSTMDashboard() {
   const token = (await cookies()).get('access_token');
+  const [users, setUsers] = React.useState<UserProfile[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState<string | null>(null);
+  
 
  if (!token?.value) redirect('/login');
 
@@ -205,7 +226,7 @@ export default async function AdminSTMDashboard() {
           <Card className="border-orange-100/70 bg-white/70 shadow-sm backdrop-blur">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle className="text-base font-bold text-slate-900">
-                Latest Orders
+                Users
               </CardTitle>
               <span className="text-xs font-medium text-slate-500">Updated just now</span>
             </CardHeader>
@@ -215,7 +236,7 @@ export default async function AdminSTMDashboard() {
                 <Table>
                   <TableHeader>
                     <TableRow className="bg-orange-50/70 hover:bg-orange-50/70">
-                      <TableHead className="text-slate-700">Order ID</TableHead>
+                      <TableHead className="text-slate-700">User ID</TableHead>
                       <TableHead className="text-slate-700">Customer</TableHead>
                       <TableHead className="text-slate-700">Status</TableHead>
                       <TableHead className="text-right text-slate-700">Amount</TableHead>
@@ -224,11 +245,11 @@ export default async function AdminSTMDashboard() {
 
                   <TableBody>
                     {recentOrders.map((order) => (
-                      <TableRow key={order.id} className="hover:bg-orange-50/40">
+                      <TableRow key={user.id} className="hover:bg-orange-50/40">
                         <TableCell className="font-semibold text-slate-900">
-                          {order.id}
+                          {user.id}
                         </TableCell>
-                        <TableCell className="text-slate-700">{order.customer}</TableCell>
+                        <TableCell className="text-slate-700">{user.email}</TableCell>
                         <TableCell>
                           <Badge
                             variant="outline"
@@ -282,6 +303,100 @@ export default async function AdminSTMDashboard() {
                      </CardContent>
           </Card>
         </div>
+            <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+     <Card className="border-orange-100/70 bg-white/70 shadow-sm backdrop-blur">    
+                    <CardHeader className="flex flex-row items-center justify-between">
+              <CardTitle className="text-base font-bold text-slate-900">
+                Latest Orders
+              </CardTitle>
+              <span className="text-xs font-medium text-slate-500">Updated just now</span>
+            </CardHeader>
+     <CardContent>
+      <div className="overflow-hidden rounded-xl border border-orange-100 bg-white">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Avatar</TableHead>
+            <TableHead>User ID</TableHead>
+            <TableHead className="text-left">Email</TableHead>
+            <TableHead className="text-left">User Rolle</TableHead>
+            <TableHead>Profile ID</TableHead>
+           
+            <TableHead className="text-center">Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+
+    <TableBody>
+  {loading && (
+    <TableRow>
+      <TableCell colSpan={6}>Loading…</TableCell>
+    </TableRow>
+  )}
+
+  {!loading && error && (
+    <TableRow>
+      <TableCell colSpan={6} className="text-red-600">
+        {error}
+      </TableCell>
+    </TableRow>
+  )}
+
+  {!loading && !error && users.length === 0 && (
+    <TableRow>
+      <TableCell colSpan={6}>No profiles found.</TableCell>
+    </TableRow>
+  )}
+
+  {!loading && !error && users.map((p) => (
+    <TableRow key={p.id}>
+      {/* Avatar */}
+      <TableCell>
+        {p.avatar ? (
+          <img
+            src={p.avatar}
+            alt={`profile-${p.id}`}
+            className="w-16 h-16 object-cover rounded"
+          />
+        ) : (
+          <div className="w-16 h-16 rounded bg-gray-100" />
+        )}
+      </TableCell>
+
+      {/* User ID */}
+      <TableCell>{p.user_id ?? "-"}</TableCell>
+
+      {/* Email */}
+      <TableCell>{p.email ?? "-"}</TableCell>
+
+      {/* Roles (simple text) */}
+      <TableCell>
+        <div className="text-sm text-gray-600">
+          Vendor: {p.is_vendor ? "Yes" : "No"} <br />
+          Customer: {p.is_customer ? "Yes" : "No"}
+        </div>
+      </TableCell>
+
+      {/* Profile ID */}
+      <TableCell className="text-right">{p.id}</TableCell>
+
+      {/* Actions */}
+      <TableCell className="text-center space-x-2">
+        <Button variant="ghost" size="sm">Edit</Button>
+        <Button variant="ghost" size="sm">Delete</Button>
+      </TableCell>
+    </TableRow>
+  ))}
+</TableBody>
+
+      </Table>
+    
+    
+    </div></CardContent> 
+    </Card>
+
+    
+    
+     </div>
       </div>
     </div>
   )
