@@ -1,8 +1,4 @@
 // app/admindashboard/page.tsx
-"use client";
-
-
-import * as React from "react";
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { Button } from "@/components/ui/button";
@@ -84,9 +80,9 @@ function statusBadgeClass(status: string) {
 
 export default async function AdminSTMDashboard() {
   const token = (await cookies()).get('access_token');
-  const [users, setUsers] = React.useState<UserProfile[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState<string | null>(null);
+  const users: UserProfile[] = [];
+  const loading = false;
+  const error: string | null = null;
   
 
  if (!token?.value) redirect('/login');
