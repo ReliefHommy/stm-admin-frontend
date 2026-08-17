@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export function middleware(request: NextRequest) {
-  const adminToken = request.cookies.get('admin_token')
+const GUARDED_PREFIXES = ['/admindashboard', '/food-dashboard', '/studio-dashboard']
 
-  if (!adminToken && request.nextUrl.pathname.startsWith('/stm-admin')) {
+export function middleware(request: NextRequest) {
+  const accessToken = request.cookies.get('access_token')
+  const { pathname } = request.nextUrl
+
+  if (!accessToken && GUARDED_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
     return NextResponse.redirect(new URL('/login', request.url))
   }
 
@@ -12,5 +15,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: '/stm-admin/:path*',
+  matcher: ['/admindashboard/:path*', '/food-dashboard/:path*', '/studio-dashboard/:path*'],
 }
